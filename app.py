@@ -50,11 +50,13 @@ def choose_data():
 
 
 def choose_model():
-    choice = st.selectbox("Model",["Linear","Exponential","Polynominal"])
+    choice = st.selectbox("Model",["Linear","Exponential","Polynominal","custom"])
     if choice == "Linear":
         model,p0 = linear, [0,1]
     elif choice == "Exponential":
         model, p0 = exponential, [1,0.01]
+    elif choice == "custom":
+        model,p0 = custom, [1,100000]
     else:
         degree = st.number_input("Polynominal degree", min_value= 1,max_value = 10,value =2,step =1)
         model,p0 = polynominal,[0.0]* (int(degree)+1)
@@ -69,6 +71,11 @@ def exponential(x,A,k):
     return A * np.exp(k*x)
 def polynominal(x,*c):
     return sum(cj * x**j for j,cj in enumerate(c))
-
+def custom(x,E0,omega0):
+    x = 2*np.pi*x
+    c = 1.8e-9
+    r = 500
+    l = 22e-3
+    return (E0)/(c*(x**2 *r**2 + l**2 *(x**2 - omega0**2)**2)**0.5)
 
 main()
