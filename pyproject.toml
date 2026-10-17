@@ -18,6 +18,3 @@ dependencies = [
 
 [project.urls]
 Repository = "https://github.com/yaotanir-blip/lab_analysis"
-
-[tool.pytest.ini_options]
-testpaths = ["tests"]
