@@ -27,7 +27,9 @@ def main():
     st.success("Fit complete")
 
     plot = plot_fit(model=model,data=data,x=x,y=y,dx=dx,dy = dy, params=fit.params, covariance=fit.covariance, x_fitted=fit.x_fitted, chi2=fit.chi2,uncertainties = fit.uncertainties)
-    st.pyplot(plot)
+    left,_ = st.columns([2,1])
+    with left:
+        st.pyplot(plot)
 
 
 
