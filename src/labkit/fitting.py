@@ -84,19 +84,3 @@ def report(title: str, result: TLSResult, names: list[str], true_values: list[fl
         print(line)
     print(f"  χ² = {result.chi2:.2f}, ν = {result.dof}, χ²/ν = {result.reduced_chi2:.2f}, p = {result.p_value:.2f}\n")
 
-# ---------------------------------------------------------------- examples
-if __name__ == "__main__":
-    rng = np.random.default_rng(42)
-    def line(x, a, b):
-        return a + b * x
-
-    x_true = np.linspace(0, 10, 15)
-    line_data = {
-        "x": x_true + rng.normal(0, 0.3, x_true.size),
-        "y": line(x_true, 1.0, 2.0) + rng.normal(0, 0.5, x_true.size),
-        "sigma_x": np.full(x_true.size, 0.3),
-        "sigma_y": np.full(x_true.size, 0.5),
-    }
-    line_fit = tls_fit(line, line_data, p0=[0.0, 1.0])
-    report("Straight line, y = a + b·x", line_fit, ["a", "b"], true_values=[1.0, 2.0])
-

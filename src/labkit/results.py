@@ -34,7 +34,6 @@ def plot_fit(model, data,x='x',y='y',dx='dx',dy = 'dy',*,params, covariance, x_f
     top.set_ylabel(y)
     top.legend(loc="best")
 
-    # --- Bottom panel: residuals with the effective (x and y) error bar
     slope = _derivative(model, xs, p, step=1e-3 * sx)
     effective_sigma = np.sqrt(sy**2 + (slope * sx) ** 2)
     bottom.axhline(0)
@@ -42,7 +41,6 @@ def plot_fit(model, data,x='x',y='y',dx='dx',dy = 'dy',*,params, covariance, x_f
     bottom.set_xlabel(x)
     bottom.set_ylabel("y − f(x)")
 
-    # --- Results box, beside the plot so it never covers data
     names = _param_names(model, m)
     lines = [f"{name} = {_format(value, sigma)}" for name, value, sigma in zip(names, p, sigma_p)]
     for i in range(m):
@@ -57,8 +55,7 @@ def plot_fit(model, data,x='x',y='y',dx='dx',dy = 'dy',*,params, covariance, x_f
     else:
         lines.append("χ²/ν undefined (ν = 0)")
     blank = Line2D([], [], linestyle="none")
-    # A legend with empty handles, used as a text box: handlelength=0 removes the gap
-    # where a line sample would normally go.
+    
     fig.legend([blank] * len(lines), lines, loc="outside right upper", title="Fit results",
                handlelength=0, handletextpad=0, alignment="left")
     return fig
@@ -103,8 +100,11 @@ def _format(value: float, sigma: float) -> str:
     if scientific:
         value, sigma = value / 10.0**exponent, sigma / 10.0**exponent
     decimals = 1 - int(np.floor(np.log10(sigma)))
-    if np.floor(np.log10(round(sigma, decimals))) > np.floor(np.log10(sigma)):  # 0.0996 → 0.10
+    if np.floor(np.log10(round(sigma, decimals))) > np.floor(np.log10(sigma)):  
         decimals -= 1
     shown = max(decimals, 0)
     text = f"{round(value, decimals) + 0.0:.{shown}f} ± {round(sigma, decimals):.{shown}f}"
-    return f"({text}) × 10{str(exponent)}"
+    if not scientific:
+        return text
+    superscript = str(exponent).translate(str.maketrans("-0123456789", "⁻⁰¹²³⁴⁵⁶⁷⁸⁹"))
+    return f"({text}) × 10{superscript}"
