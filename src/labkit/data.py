@@ -22,7 +22,6 @@ def getheader(filepath='',delimiter=','):
     return np.loadtxt(filepath,max_rows=1,dtype=str,unpack=True,delimiter=delimiter,encoding="latin-1")
         
 
-
 def clean(h):
     return h.split('(')[0].strip().lower().replace(' ','_')
 

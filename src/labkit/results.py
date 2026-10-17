@@ -17,23 +17,17 @@ def plot_fit(model, data,x='x',y='y',dx='dx',dy = 'dy',*,params, covariance, x_f
     n, m = len(xs), len(p)
     dof = n - m
 
-    # Constrained layout makes room for the results box placed outside the axes.
+   
     fig, (top, bottom) = plt.subplots(2, 1, sharex=True, height_ratios=(3, 1), layout="constrained")
-
-    # --- Top panel: data, fit, 1σ band, and each point's shift onto the curve
     lo, hi = min(xs.min(), x_fit.min()), max(xs.max(), x_fit.max())
     curve_x = np.linspace(lo, hi, 400)
     curve_y = model(curve_x, *p)
     band = _curve_uncertainty(model, curve_x, p, sigma_p, cov)
-
-    # fmt="o" draws the data as points; without it errorbar joins them with a line.
     top.errorbar(xs, ys, xerr=sx, yerr=sy, fmt="o", label="Data")
     (fit_line,) = top.plot(curve_x, curve_y, label="Fit")
-    # The band takes the fit line's colour and is see-through: a default fill is opaque
-    # and would hide the curve it surrounds.
+
     top.fill_between(curve_x, curve_y - band, curve_y + band, color=fit_line.get_color(),
                      alpha=0.3, label="1σ band")
-    # All segments as one line (NaN breaks it between points), so they share one colour.
     gaps = np.full(n, np.nan)
     top.plot(np.column_stack([xs, x_fit, gaps]).ravel(),
              np.column_stack([ys, model(x_fit, *p), gaps]).ravel(), label="Shift to fitted x")
