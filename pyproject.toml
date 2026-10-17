@@ -13,7 +13,7 @@ license-files = ["LICENSE"]
 authors = [{ name = "yaotanir-blip" }]
 dependencies = [
     "numpy>=2.5",
-    "matplotlib>=3.11",
+    "matplotlib>=3.11","scipy>=1.18"
 ]
 
 [project.urls]

@@ -26,7 +26,7 @@ class TLSResult:
 
 
 def tls_fit(
-    model: Callable[..., np.ndarray],
+    model,
     data: dict,
     p0: list[float],
     *,
@@ -83,7 +83,6 @@ def report(title: str, result: TLSResult, names: list[str], true_values: list[fl
             line += f"   (true {true_values[i]:g}, {pull:+.1f}σ away)"
         print(line)
     print(f"  χ² = {result.chi2:.2f}, ν = {result.dof}, χ²/ν = {result.reduced_chi2:.2f}, p = {result.p_value:.2f}\n")
-
 
 # ---------------------------------------------------------------- examples
 if __name__ == "__main__":

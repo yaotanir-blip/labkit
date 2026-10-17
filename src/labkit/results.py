@@ -1,11 +1,13 @@
 import numpy as np 
 import matplotlib.pyplot as plt 
+import inspect
+
 
 from matplotlib.figure import Figure
 from matplotlib.lines import Line2D
 from scipy.stats import chi2 as chi2_distribution
 
-def plot_fit(data,x='x',y='y',dx='dx',dy = 'dy', *model, params, covariance, x_fitted, chi2):
+def plot_fit(model, data,x='x',y='y',dx='dx',dy = 'dy',*,params, covariance, x_fitted, chi2,uncertainties):
     xs, ys = np.asarray(data[x], dtype=float), np.asarray(data[y], dtype=float)
     sx, sy = np.asarray(data[dx], dtype=float), np.asarray(data[dy], dtype=float)
     p = np.asarray(params, dtype=float)
@@ -35,7 +37,7 @@ def plot_fit(data,x='x',y='y',dx='dx',dy = 'dy', *model, params, covariance, x_f
     gaps = np.full(n, np.nan)
     top.plot(np.column_stack([xs, x_fit, gaps]).ravel(),
              np.column_stack([ys, model(x_fit, *p), gaps]).ravel(), label="Shift to fitted x")
-    top.set_ylabel(y_label or y)
+    top.set_ylabel(y)
     top.legend(loc="best")
 
     # --- Bottom panel: residuals with the effective (x and y) error bar
@@ -43,7 +45,7 @@ def plot_fit(data,x='x',y='y',dx='dx',dy = 'dy', *model, params, covariance, x_f
     effective_sigma = np.sqrt(sy**2 + (slope * sx) ** 2)
     bottom.axhline(0)
     bottom.errorbar(xs, ys - model(xs, *p), yerr=effective_sigma, fmt="o")
-    bottom.set_xlabel(x_label or x)
+    bottom.set_xlabel(x)
     bottom.set_ylabel("y − f(x)")
 
     # --- Results box, beside the plot so it never covers data
@@ -111,4 +113,4 @@ def _format(value: float, sigma: float) -> str:
         decimals -= 1
     shown = max(decimals, 0)
     text = f"{round(value, decimals) + 0.0:.{shown}f} ± {round(sigma, decimals):.{shown}f}"
-    return f"({text}) × 10{str(exponent).translate(_SUPERSCRIPT)}" if scientific else text
+    return f"({text}) × 10{str(exponent)}"
