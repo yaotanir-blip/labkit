@@ -2,7 +2,7 @@
 
 A small toolkit for fitting lab data when **both x and y have uncertainties**, with a Streamlit app so you can fit a CSV without writing any code.
 
-Ordinary least squares assumes x is known exactly. In many lab measurements it isn't. labkit uses **total least squares**: it fits the model parameters together with a small shift δ for each x value, weighting every residual by its uncertainty. You get:
+Ordinary least squares assumes x is known exactly. labkit uses **total least squares**which fits the model parameters together with a small shift δ for each x value, weighting every residual by its uncertainty. You get:
 
 - best-fit parameters with standard uncertainties and the full covariance matrix
 - the parameter correlations
